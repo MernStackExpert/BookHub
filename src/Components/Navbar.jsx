@@ -72,7 +72,12 @@ export default function Navbar() {
               tabIndex={-1}
               className="menu menu-sm dropdown-content bg-black rounded-box z-20 mt-3 w-52 p-2 shadow"
             >
-              <li><span>{user?.displayName}</span></li>
+              <li>
+                <Link href={'/'}> Add Book </Link>
+              </li>
+              <li>
+                <Link href={'/'}> Manage Book </Link>
+              </li>
 
               <li>
                 <button onClick={logout}>Logout</button>
