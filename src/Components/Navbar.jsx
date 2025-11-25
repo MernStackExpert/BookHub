@@ -85,7 +85,7 @@ export default function Navbar() {
             </ul>
           </div>
         ) : (
-          <Link href="/login" className="font-semibold">Login</Link>
+          <Link href="/login" className="font-semibold btn bg-gray-800 text-white">Login</Link>
         )}
       </div>
     </div>

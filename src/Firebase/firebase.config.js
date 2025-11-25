@@ -5,13 +5,22 @@ import { getAuth } from "firebase/auth";
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
+// const firebaseConfig = {
+//   apiKey: "AIzaSyD85IDAM7zNIOfAnEyNXH5Lml11R5Qs7pc",
+//   authDomain: "bookhub-f26c2.firebaseapp.com",
+//   projectId: "bookhub-f26c2",
+//   storageBucket: "bookhub-f26c2.firebasestorage.app",
+//   messagingSenderId: "337893971774",
+//   appId: "1:337893971774:web:4203843f537b9eeeaf7e6f"
+// };
+
 const firebaseConfig = {
-  apiKey: "AIzaSyD85IDAM7zNIOfAnEyNXH5Lml11R5Qs7pc",
-  authDomain: "bookhub-f26c2.firebaseapp.com",
-  projectId: "bookhub-f26c2",
-  storageBucket: "bookhub-f26c2.firebasestorage.app",
-  messagingSenderId: "337893971774",
-  appId: "1:337893971774:web:4203843f537b9eeeaf7e6f"
+  apiKey: process.env.NEXT_PUBLIC_apiKey,
+  authDomain: process.env.NEXT_PUBLIC_authDomain,
+  projectId: process.env.NEXT_PUBLIC_projectId,
+  storageBucket: process.env.NEXT_PUBLIC_storageBucket,
+  messagingSenderId: process.env.NEXT_PUBLIC_messagingSenderId,
+  appId: process.env.NEXT_PUBLIC_appId
 };
 
 // Initialize Firebase

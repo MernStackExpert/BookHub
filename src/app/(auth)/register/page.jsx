@@ -3,7 +3,13 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { FaGoogle, FaEye, FaEyeSlash, FaArrowLeft, FaCloudUploadAlt } from "react-icons/fa";
+import {
+  FaGoogle,
+  FaEye,
+  FaEyeSlash,
+  FaArrowLeft,
+  FaCloudUploadAlt,
+} from "react-icons/fa";
 import toast from "react-hot-toast";
 import { useAuth } from "@/Provider/AuthProvider";
 
@@ -36,7 +42,9 @@ const RegisterPage = () => {
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
 
     if (!passwordRegex.test(password)) {
-      toast.error("Password must contain 1 uppercase, 1 lowercase, 1 number and 6+ chars.");
+      toast.error(
+        "Password must contain 1 uppercase, 1 lowercase, 1 number and 6+ chars."
+      );
       setLoading(false);
       return;
     }
@@ -48,8 +56,8 @@ const RegisterPage = () => {
     }
 
     try {
-      const image_hosting_key = "271869a6b9ececa3a8f8f741c63e00f5";
-      const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
+      // const image_hosting_key = "271869a6b9ececa3a8f8f741c63e00f5";
+      const image_hosting_api = `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_image_hosting_key}`;
 
       const formData = new FormData();
       formData.append("image", imageFile);
@@ -77,23 +85,30 @@ const RegisterPage = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-950 text-white relative overflow-hidden py-10">
-      
       <div className="absolute top-0 left-0 w-96 h-96 bg-teal-900/20 rounded-full blur-3xl mix-blend-screen"></div>
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-amber-900/20 rounded-full blur-3xl mix-blend-screen"></div>
 
-      <Link href="/" className="absolute top-8 left-8 flex items-center gap-2 text-slate-400 hover:text-amber-500 transition-colors z-20">
+      <Link
+        href="/"
+        className="absolute top-8 left-8 flex items-center gap-2 text-slate-400 hover:text-amber-500 transition-colors z-20"
+      >
         <FaArrowLeft /> Back to Home
       </Link>
 
       <div className="w-full max-w-5xl h-auto md:min-h-[650px] grid grid-cols-1 md:grid-cols-2 bg-slate-900/50 backdrop-blur-lg border border-slate-800 rounded-2xl shadow-2xl overflow-hidden m-4">
-        
-        <div className="hidden md:flex flex-col justify-between p-10 bg-cover bg-center relative" 
-             style={{ backgroundImage: "url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=1000&auto=format&fit=crop')" }}>
-          
+        <div
+          className="hidden md:flex flex-col justify-between p-10 bg-cover bg-center relative"
+          style={{
+            backgroundImage:
+              "url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=1000&auto=format&fit=crop')",
+          }}
+        >
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent"></div>
-          
+
           <div className="relative z-10">
-            <h2 className="text-4xl font-bold text-white font-serif">Join the <br/> <span className="text-amber-500">Community</span></h2>
+            <h2 className="text-4xl font-bold text-white font-serif">
+              Join the <br /> <span className="text-amber-500">Community</span>
+            </h2>
           </div>
 
           <div className="relative z-10">
@@ -105,13 +120,14 @@ const RegisterPage = () => {
         </div>
 
         <div className="flex flex-col justify-center p-8 md:p-12 w-full">
-          
           <div className="mb-6 text-center md:text-left">
             <h3 className="text-3xl font-bold text-white">Create Account</h3>
-            <p className="text-slate-400 mt-2">Start your reading journey today</p>
+            <p className="text-slate-400 mt-2">
+              Start your reading journey today
+            </p>
           </div>
 
-          <button 
+          <button
             onClick={handleGoogleSignIn}
             className="btn btn-outline w-full border-slate-700 text-white hover:bg-slate-800 hover:border-slate-600 normal-case flex items-center gap-3 mb-6"
           >
@@ -119,56 +135,65 @@ const RegisterPage = () => {
             Sign up with Google
           </button>
 
-          <div className="divider divider-start text-slate-600 text-xs mb-6">OR REGISTER WITH EMAIL</div>
+          <div className="divider divider-start text-slate-600 text-xs mb-6">
+            OR REGISTER WITH EMAIL
+          </div>
 
           <form onSubmit={handleRegister} className="space-y-4">
-            
             <div className="form-control">
-              <label className="label text-xs text-slate-400 font-semibold">FULL NAME</label>
-              <input 
-                type="text" 
-                name="name" 
-                placeholder="John Doe" 
-                className="input input-bordered bg-slate-950/50 border-slate-700 focus:border-amber-500 text-white w-full" 
-                required 
+              <label className="label text-xs text-slate-400 font-semibold">
+                FULL NAME
+              </label>
+              <input
+                type="text"
+                name="name"
+                placeholder="John Doe"
+                className="input input-bordered bg-slate-950/50 border-slate-700 focus:border-amber-500 text-white w-full"
+                required
               />
             </div>
 
             <div className="form-control">
-                <label className="label text-xs text-slate-400 font-semibold">PROFILE PICTURE</label>
-                <div className="relative">
-                    <input 
-                        type="file" 
-                        name="image" 
-                        accept="image/*"
-                        className="file-input file-input-bordered bg-slate-950/50 border-slate-700 focus:border-amber-500 text-slate-300 w-full pl-10" 
-                        required 
-                    />
-                    <FaCloudUploadAlt className="absolute left-3 top-3 text-slate-500" />
-                </div>
+              <label className="label text-xs text-slate-400 font-semibold">
+                PROFILE PICTURE
+              </label>
+              <div className="relative">
+                <input
+                  type="file"
+                  name="image"
+                  accept="image/*"
+                  className="file-input file-input-bordered bg-slate-950/50 border-slate-700 focus:border-amber-500 text-slate-300 w-full pl-10"
+                  required
+                />
+                <FaCloudUploadAlt className="absolute left-3 top-3 text-slate-500" />
+              </div>
             </div>
 
             <div className="form-control">
-              <label className="label text-xs text-slate-400 font-semibold">EMAIL ADDRESS</label>
-              <input 
-                type="email" 
-                name="email" 
-                placeholder="you@example.com" 
-                className="input input-bordered bg-slate-950/50 border-slate-700 focus:border-amber-500 text-white w-full" 
-                required 
+              <label className="label text-xs text-slate-400 font-semibold">
+                EMAIL ADDRESS
+              </label>
+              <input
+                type="email"
+                name="email"
+                placeholder="you@example.com"
+                className="input input-bordered bg-slate-950/50 border-slate-700 focus:border-amber-500 text-white w-full"
+                required
               />
             </div>
 
             <div className="form-control relative">
-              <label className="label text-xs text-slate-400 font-semibold">PASSWORD</label>
-              <input 
-                type={showPassword ? "text" : "password"} 
-                name="password" 
-                placeholder="••••••••" 
-                className="input input-bordered bg-slate-950/50 border-slate-700 focus:border-amber-500 text-white w-full pr-10" 
-                required 
+              <label className="label text-xs text-slate-400 font-semibold">
+                PASSWORD
+              </label>
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="••••••••"
+                className="input input-bordered bg-slate-950/50 border-slate-700 focus:border-amber-500 text-white w-full pr-10"
+                required
               />
-              <button 
+              <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-[36px] z-100 text-slate-500 hover:text-white transition-colors"
@@ -177,18 +202,28 @@ const RegisterPage = () => {
               </button>
             </div>
 
-            <button type="submit" disabled={loading} className="btn bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white border-none w-full mt-4 shadow-lg shadow-amber-900/20">
-              {loading ? <span className="loading loading-spinner"></span> : "Create Account"}
+            <button
+              type="submit"
+              disabled={loading}
+              className="btn bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white border-none w-full mt-4 shadow-lg shadow-amber-900/20"
+            >
+              {loading ? (
+                <span className="loading loading-spinner"></span>
+              ) : (
+                "Create Account"
+              )}
             </button>
           </form>
 
           <p className="text-center text-slate-400 text-sm mt-6">
             Already have an account?{" "}
-            <Link href="/login" className="text-amber-500 font-semibold hover:underline">
+            <Link
+              href="/login"
+              className="text-amber-500 font-semibold hover:underline"
+            >
               Login
             </Link>
           </p>
-
         </div>
       </div>
     </div>
