@@ -126,7 +126,7 @@ export default function AllBooks() {
                         <div className="flex items-center gap-1 text-amber-400 text-xs font-medium mb-2">
                            <FaStar /> {book.rating || "4.5"}
                         </div>
-                        <div className="badge badge-ghost badge-sm text-slate-400 border-slate-700">
+                        <div className="badge badge-ghost badge-sm text-slate-900 font-semibold border-slate-700">
                            ${book.price}
                         </div>
                     </div>
