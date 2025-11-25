@@ -12,6 +12,7 @@ import {
 } from "react-icons/fa";
 import toast from "react-hot-toast";
 import { useAuth } from "@/Provider/AuthProvider";
+import Swal from "sweetalert2";
 
 const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -23,7 +24,14 @@ const RegisterPage = () => {
   const handleGoogleSignIn = async () => {
     try {
       await loginWithGoogle();
-      toast.success("Welcome to BookHub!");
+
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Register Succesfull",
+        showConfirmButton: false,
+        timer: 1500,
+      });
       router.push("/");
     } catch (error) {
       toast.error(error.message);
@@ -45,7 +53,9 @@ const RegisterPage = () => {
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
 
     if (!passwordRegex.test(password)) {
-      toast.error("Password must contain 1 uppercase, 1 lowercase, 1 number and 6+ chars.");
+      toast.error(
+        "Password must contain 1 uppercase, 1 lowercase, 1 number and 6+ chars."
+      );
       setLoading(false);
       return;
     }
@@ -79,7 +89,13 @@ const RegisterPage = () => {
 
     try {
       await register(email, password, name, photoURL);
-      toast.success("Registration Successful!");
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Register Succesfull",
+        showConfirmButton: false,
+        timer: 1500,
+      });
       form.reset();
       router.push("/");
     } catch (error) {
@@ -126,7 +142,9 @@ const RegisterPage = () => {
         <div className="flex flex-col justify-center p-8 md:p-12 w-full">
           <div className="mb-6 text-center md:text-left">
             <h3 className="text-3xl font-bold">Create Account</h3>
-            <p className="text-slate-400 mt-2">Start your reading journey today</p>
+            <p className="text-slate-400 mt-2">
+              Start your reading journey today
+            </p>
           </div>
 
           <button
@@ -136,11 +154,15 @@ const RegisterPage = () => {
             <FaGoogle className="text-amber-500" /> Sign up with Google
           </button>
 
-          <div className="divider divider-start text-slate-600 text-xs mb-6">OR REGISTER WITH EMAIL</div>
+          <div className="divider divider-start text-slate-600 text-xs mb-6">
+            OR REGISTER WITH EMAIL
+          </div>
 
           <form onSubmit={handleRegister} className="space-y-4">
             <div className="form-control">
-              <label className="label text-xs text-slate-400 font-semibold">FULL NAME</label>
+              <label className="label text-xs text-slate-400 font-semibold">
+                FULL NAME
+              </label>
               <input
                 type="text"
                 name="name"
@@ -150,13 +172,17 @@ const RegisterPage = () => {
             </div>
 
             <div className="form-control">
-              <label className="label text-xs text-slate-400 font-semibold">PROFILE PICTURE</label>
+              <label className="label text-xs text-slate-400 font-semibold">
+                PROFILE PICTURE
+              </label>
 
               <div className="bg-slate-900/40 border border-slate-700 rounded-xl p-4">
                 <div className="tabs tabs-boxed w-full bg-slate-800/50 border border-slate-700">
                   <a
                     className={`tab flex-1 text-slate-300 ${
-                      imageTab === "upload" ? "tab-active bg-amber-600 text-white" : ""
+                      imageTab === "upload"
+                        ? "tab-active bg-amber-600 text-white"
+                        : ""
                     }`}
                     onClick={() => setImageTab("upload")}
                   >
@@ -165,7 +191,9 @@ const RegisterPage = () => {
 
                   <a
                     className={`tab flex-1 text-slate-300 ${
-                      imageTab === "url" ? "tab-active bg-amber-600 text-white" : ""
+                      imageTab === "url"
+                        ? "tab-active bg-amber-600 text-white"
+                        : ""
                     }`}
                     onClick={() => setImageTab("url")}
                   >
@@ -199,7 +227,9 @@ const RegisterPage = () => {
             </div>
 
             <div className="form-control">
-              <label className="label text-xs text-slate-400 font-semibold">EMAIL ADDRESS</label>
+              <label className="label text-xs text-slate-400 font-semibold">
+                EMAIL ADDRESS
+              </label>
               <input
                 type="email"
                 name="email"
@@ -209,7 +239,9 @@ const RegisterPage = () => {
             </div>
 
             <div className="form-control relative">
-              <label className="label text-xs text-slate-400 font-semibold">PASSWORD</label>
+              <label className="label text-xs text-slate-400 font-semibold">
+                PASSWORD
+              </label>
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
@@ -230,13 +262,20 @@ const RegisterPage = () => {
               disabled={loading}
               className="btn bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white border-none w-full mt-4 shadow-lg"
             >
-              {loading ? <span className="loading loading-spinner"></span> : "Create Account"}
+              {loading ? (
+                <span className="loading loading-spinner"></span>
+              ) : (
+                "Create Account"
+              )}
             </button>
           </form>
 
           <p className="text-center text-slate-400 text-sm mt-6">
             Already have an account?{" "}
-            <Link href="/login" className="text-amber-500 font-semibold hover:underline">
+            <Link
+              href="/login"
+              className="text-amber-500 font-semibold hover:underline"
+            >
               Login
             </Link>
           </p>

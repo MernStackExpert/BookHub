@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { FaSearch, FaFilter, FaStar, FaBookOpen } from "react-icons/fa";
 import useAxios from "@/hooks/useAxios";
+import { motion } from "framer-motion";
 
 export default function AllBooks() {
   const [books, setBooks] = useState([]);
@@ -31,11 +32,7 @@ export default function AllBooks() {
 
   useEffect(() => {
     let result = books;
-
-    if (category !== "All") {
-      result = result.filter((book) => book.category === category);
-    }
-
+    if (category !== "All") result = result.filter((book) => book.category === category);
     if (searchTerm) {
       const lowerSearch = searchTerm.toLowerCase();
       result = result.filter((book) => {
@@ -44,26 +41,50 @@ export default function AllBooks() {
         return title.includes(lowerSearch) || author.includes(lowerSearch);
       });
     }
-
     setDisplayBooks(result);
   }, [searchTerm, category, books]);
 
+  const container = {
+    hidden: { opacity: 0 },
+    show: { 
+      opacity: 1,
+      transition: { staggerChildren: 0.15 }
+    },
+  };
+
+  const item = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 },
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 text-slate-200 pb-20">
-      
       <div className="bg-slate-900 border-b border-slate-800 pt-24 pb-12 px-6 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+        <motion.h1
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-4xl md:text-5xl font-bold text-white mb-4"
+        >
           Explore Our <span className="text-amber-500">Library</span>
-        </h1>
-        <p className="text-slate-400 max-w-2xl mx-auto">
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.2 }}
+          className="text-slate-400 max-w-2xl mx-auto"
+        >
           Browse through our extensive collection of books. Filter by category or search for your favorite titles.
-        </p>
+        </motion.p>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8">
-        
-        <div className="bg-slate-800/80 backdrop-blur-md p-4 rounded-xl shadow-xl border border-slate-700 flex flex-col md:flex-row gap-4 justify-between items-center">
-          
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="bg-slate-800/80 backdrop-blur-md p-4 rounded-xl shadow-xl border border-slate-700 flex flex-col md:flex-row gap-4 justify-between items-center"
+        >
           <div className="relative w-full md:w-1/2">
             <FaSearch className="absolute left-4 top-3.5 text-slate-500" />
             <input 
@@ -76,38 +97,44 @@ export default function AllBooks() {
           </div>
 
           <div className="relative w-full md:w-1/4">
-             <div className="absolute left-3 top-3.5 text-amber-500 pointer-events-none">
-                <FaFilter />
-             </div>
-             <select 
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="select select-bordered w-full pl-10 bg-slate-900 border-slate-700 text-white focus:border-amber-500"
-             >
-                <option value="All">All Categories</option>
-                <option value="Fiction">Fiction</option>
-                <option value="Non-Fiction">Non-Fiction</option>
-                <option value="Sci-Fi">Sci-Fi & Fantasy</option>
-                <option value="Mystery">Mystery & Thriller</option>
-                <option value="Self-Help">Self-Help</option>
-                <option value="Programming">Programming</option>
-                <option value="History">History</option>
-             </select>
+            <div className="absolute left-3 top-3.5 text-amber-500 pointer-events-none">
+              <FaFilter />
+            </div>
+            <select 
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="select select-bordered w-full pl-10 bg-slate-900 border-slate-700 text-white focus:border-amber-500"
+            >
+              <option value="All">All Categories</option>
+              <option value="Fiction">Fiction</option>
+              <option value="Non-Fiction">Non-Fiction</option>
+              <option value="Sci-Fi">Sci-Fi & Fantasy</option>
+              <option value="Mystery">Mystery & Thriller</option>
+              <option value="Self-Help">Self-Help</option>
+              <option value="Programming">Programming</option>
+              <option value="History">History</option>
+            </select>
           </div>
-        </div>
+        </motion.div>
 
         <div className="mt-12">
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-               {[...Array(8)].map((_, i) => (
-                 <div key={i} className="h-80 bg-slate-900 rounded-xl animate-pulse"></div>
-               ))}
+              {[...Array(8)].map((_, i) => (
+                <div key={i} className="h-80 bg-slate-900 rounded-xl animate-pulse"></div>
+              ))}
             </div>
           ) : displayBooks.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <motion.div
+              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+              variants={container}
+              initial="hidden"
+              animate="show"
+            >
               {displayBooks.map((book) => (
-                <div 
+                <motion.div 
                   key={book._id} 
+                  variants={item}
                   className="card bg-slate-900 border border-slate-800 hover:border-amber-500/50 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
                 >
                   <figure className="relative h-60 w-full overflow-hidden">
@@ -144,15 +171,20 @@ export default function AllBooks() {
                       </Link>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           ) : (
-            <div className="text-center py-20">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8 }}
+              className="text-center py-20"
+            >
               <div className="text-6xl mb-4">🔍</div>
               <h3 className="text-2xl font-bold text-white">No Books Found</h3>
               <p className="text-slate-400 mt-2">
-                We couldn t find any books matching {searchTerm} in {category} category.
+                We couldn’t find any books matching {searchTerm} in {category} category.
               </p>
               <button 
                 onClick={() => {setSearchTerm(""); setCategory("All");}} 
@@ -160,10 +192,9 @@ export default function AllBooks() {
               >
                 Reset Filters
               </button>
-            </div>
+            </motion.div>
           )}
         </div>
-
       </div>
     </div>
   );
