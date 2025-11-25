@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { FaCloudUploadAlt, FaStar, FaEdit } from "react-icons/fa";
+import { FaCloudUploadAlt, FaStar, FaEdit, FaLink, FaImage } from "react-icons/fa";
 import useAxios from "@/hooks/useAxios";
 import PrivateRoute from "@/PrivateRoute/PrivateRoute";
 import Swal from "sweetalert2";
@@ -22,6 +22,7 @@ export default function UpdateBook() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [currentImage, setCurrentImage] = useState("");
+  const [imageTab, setImageTab] = useState("upload");
   const axiosBase = useAxios();
 
   useEffect(() => {
@@ -42,6 +43,7 @@ export default function UpdateBook() {
         );
         setValue("authorName", book.authorName);
         setValue("authorEmail", book.authorEmail);
+        setValue("imageURL", book.image);
 
         setLoading(false);
       } catch (error) {
@@ -58,7 +60,7 @@ export default function UpdateBook() {
     let imgURL = currentImage;
 
     try {
-      if (data.image && data.image[0]) {
+      if (imageTab === "upload" && data.image && data.image[0]) {
         const imageFile = data.image[0];
         const image_hosting_key = "271869a6b9ececa3a8f8f741c63e00f5";
         const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
@@ -71,6 +73,8 @@ export default function UpdateBook() {
         });
 
         imgURL = res.data.data.display_url;
+      } else if (imageTab === "url" && data.imageURL) {
+        imgURL = data.imageURL;
       }
 
       const updatedBookData = {
@@ -93,7 +97,7 @@ export default function UpdateBook() {
           timer: 1500,
         });
 
-        router.push("/managebooks");
+        router.push("/dashboard/manage-books");
       } else {
         toast.success("No changes made.");
       }
@@ -196,8 +200,8 @@ export default function UpdateBook() {
                 <input
                   type="number"
                   step="0.01"
-                  {...register("price", { required: true })}
-                  className="input input-bordered bg-slate-800 border-slate-700 text-white w-full"
+                  {...register("price", { required: true, min: 0 })}
+                  className="input input-bordered bg-slate-800 border-slate-700 text-white focus:border-amber-500 w-full"
                 />
               </div>
 
@@ -207,7 +211,7 @@ export default function UpdateBook() {
                 </label>
                 <select
                   {...register("rating", { required: true })}
-                  className="select select-bordered bg-slate-800 border-slate-700 text-white w-full"
+                  className="select select-bordered bg-slate-800 border-slate-700 text-white focus:border-amber-500 w-full"
                 >
                   <option value="5">5 - Excellent</option>
                   <option value="4">4 - Good</option>
@@ -223,26 +227,76 @@ export default function UpdateBook() {
                 Book Cover
               </label>
 
-              <div className="flex flex-col md:flex-row gap-6 items-center">
+              <div className="flex flex-col md:flex-row gap-6 items-start">
                 <div className="avatar">
                   <div className="w-24 h-32 rounded-lg ring ring-slate-700">
                     <img src={currentImage} alt="Current Cover" />
                   </div>
                 </div>
 
-                <div className="relative border-2 border-dashed border-slate-700 rounded-lg p-6 bg-slate-800/30 hover:bg-slate-800/50 transition-all text-center cursor-pointer flex-1 w-full">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    {...register("image")}
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                  />
-                  <div className="flex flex-col items-center gap-2">
-                    <FaCloudUploadAlt className="text-3xl text-slate-400" />
-                    <p className="text-sm text-slate-400 font-medium">
-                      Change Cover Photo
-                    </p>
+                <div className="flex-1 w-full">
+                  <div className="flex gap-2 mb-4 bg-slate-800 p-1 rounded-lg w-fit">
+                    <button
+                      type="button"
+                      onClick={() => setImageTab("upload")}
+                      className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                        imageTab === "upload"
+                          ? "bg-slate-600 text-white shadow"
+                          : "text-slate-400 hover:text-white"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <FaCloudUploadAlt /> Upload
+                      </div>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setImageTab("url")}
+                      className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                        imageTab === "url"
+                          ? "bg-slate-600 text-white shadow"
+                          : "text-slate-400 hover:text-white"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <FaLink /> Image URL
+                      </div>
+                    </button>
                   </div>
+
+                  {imageTab === "upload" ? (
+                    <div className="relative border-2 border-dashed border-slate-700 rounded-lg p-6 bg-slate-800/30 hover:bg-slate-800/50 transition-all text-center cursor-pointer w-full">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        {...register("image")}
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                      />
+                      <div className="flex flex-col items-center gap-2">
+                        <FaCloudUploadAlt className="text-3xl text-slate-400" />
+                        <p className="text-sm text-slate-400 font-medium">
+                          Click or Drag to Upload New Photo
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="w-full">
+                      <div className="relative">
+                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                          <FaLink className="text-slate-500" />
+                        </div>
+                        <input
+                          type="url"
+                          placeholder="https://example.com/image.jpg"
+                          {...register("imageURL")}
+                          className="input input-bordered bg-slate-800 border-slate-700 text-white w-full pl-10 focus:border-amber-500"
+                        />
+                      </div>
+                      <p className="text-xs text-slate-500 mt-2 ml-1">
+                        Paste a direct link to an image.
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
