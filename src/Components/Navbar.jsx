@@ -13,6 +13,12 @@ export default function Navbar() {
       <li><Link className="hover:bg-gray-800" href="/about">About</Link></li>
       <li><Link className="hover:bg-gray-800" href="/service">Service</Link></li>
       <li><Link className="hover:bg-gray-800" href="/contact">Contact</Link></li>
+
+      {
+        user && <>
+          <li><Link className="hover:bg-gray-800" href="/allbooks">All Books</Link></li>
+        </>
+      }
     </>
   );
 
@@ -73,10 +79,10 @@ export default function Navbar() {
               className="menu menu-sm dropdown-content bg-black rounded-box z-20 mt-3 w-52 p-2 shadow"
             >
               <li>
-                <Link href={'/'}> Add Book </Link>
+                <Link href={'/addbooks'}> Add Book </Link>
               </li>
               <li>
-                <Link href={'/'}> Manage Book </Link>
+                <Link href={'/managebooks'}> Manage Book </Link>
               </li>
 
               <li>

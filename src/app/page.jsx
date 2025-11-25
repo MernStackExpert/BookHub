@@ -1,9 +1,178 @@
-import Image from "next/image";
+"use client";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { FaArrowRight, FaStar, FaBookOpen } from "react-icons/fa";
+import useAxios from "@/hooks/useAxios";
 
 export default function Home() {
+  const [books, setBooks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const axiosBase = useAxios();
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const res = await axiosBase.get("/books");
+        // ডাটা রিভার্স করে (লেটেস্ট আগে) এবং স্লাইস করে ৯টা নেওয়া হচ্ছে
+        const latestBooks = res.data.reverse().slice(0, 9); 
+        setBooks(latestBooks);
+      } catch (error) {
+        console.error("Error fetching books:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBooks();
+  }, [axiosBase]);
+
   return (
-    <div>
-      <h1>hello world</h1>
+    <div className="min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-amber-500 selection:text-white">
+      
+      {/* --- HERO SECTION --- */}
+      <section className="relative w-full h-[600px] flex items-center justify-center overflow-hidden">
+        
+        {/* Background Image with Overlay */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat bg-fixed"
+          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=1920&auto=format&fit=crop')" }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 via-slate-900/80 to-slate-950"></div>
+        </div>
+
+        {/* Content */}
+        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto space-y-6">
+          <div className="inline-block px-4 py-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 backdrop-blur-md mb-4 animate-fade-in-up">
+            <span className="text-amber-400 text-sm font-semibold tracking-wide uppercase">Welcome to BookHub</span>
+          </div>
+          
+          <h1 className="text-5xl md:text-7xl font-bold text-white leading-tight drop-shadow-lg">
+            Discover Your Next <br/>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">
+              Great Adventure
+            </span>
+          </h1>
+          
+          <p className="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed">
+            Explore our curated collection of bestsellers, classics, and hidden gems. 
+            Join our community of readers today.
+          </p>
+
+          <div className="pt-6 flex flex-col sm:flex-row gap-4 justify-center">
+             <Link href="/books">
+               <button className="btn btn-lg bg-amber-600 hover:bg-amber-700 text-white border-none rounded-full px-8 shadow-lg shadow-amber-900/40 transition-transform hover:scale-105">
+                 Explore Books
+               </button>
+             </Link>
+             <Link href="/register">
+               <button className="btn btn-lg btn-outline text-white border-slate-500 hover:bg-slate-800 hover:border-slate-400 rounded-full px-8">
+                 Join Community
+               </button>
+             </Link>
+          </div>
+        </div>
+
+        {/* Decorative Blur Blobs */}
+        <div className="absolute top-0 left-0 w-64 h-64 bg-teal-600/20 blur-3xl rounded-full"></div>
+        <div className="absolute bottom-0 right-0 w-64 h-64 bg-amber-600/20 blur-3xl rounded-full"></div>
+      </section>
+
+
+      {/* --- LATEST BOOKS SECTION --- */}
+      <section className="py-20 px-4 md:px-8 max-w-7xl mx-auto">
+        
+        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4 border-b border-slate-800 pb-6">
+          <div>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">
+              Fresh <span className="text-teal-400">Arrivals</span>
+            </h2>
+            <p className="text-slate-400">Check out the latest additions to our library.</p>
+          </div>
+          <Link href="/books" className="hidden md:flex items-center gap-2 text-amber-500 hover:text-amber-400 font-medium transition-colors group">
+            View All Books <FaArrowRight className="group-hover:translate-x-1 transition-transform"/>
+          </Link>
+        </div>
+
+        {/* Loading State */}
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+             {[1,2,3].map(n => (
+               <div key={n} className="h-96 bg-slate-900 rounded-2xl animate-pulse"></div>
+             ))}
+          </div>
+        ) : (
+          <>
+            {/* Books Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {books.map((book) => (
+                <div 
+                  key={book._id} 
+                  className="group relative bg-slate-900/50 border border-slate-800 rounded-2xl overflow-hidden hover:border-amber-500/50 hover:shadow-2xl hover:shadow-amber-900/20 transition-all duration-500"
+                >
+                  {/* Image Container */}
+                  <div className="relative h-64 w-full overflow-hidden">
+                    <img 
+                      src={book.image} 
+                      alt={book.title} 
+                      className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" 
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-80"></div>
+                    
+                    {/* Category Badge */}
+                    <span className="absolute top-4 right-4 bg-slate-950/80 backdrop-blur-sm text-teal-400 text-xs font-bold px-3 py-1 rounded-full border border-teal-500/30">
+                      {book.category}
+                    </span>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-6 relative">
+                    {/* Rating */}
+                    <div className="flex items-center gap-1 mb-2 text-amber-400 text-sm">
+                      <FaStar />
+                      <span className="text-slate-300 ml-1">{book.rating || 4.5}</span>
+                    </div>
+
+                    <h3 className="text-xl font-bold text-white mb-1 group-hover:text-amber-500 transition-colors line-clamp-1">
+                      {book.title}
+                    </h3>
+                    <p className="text-slate-400 text-sm mb-4">by {book.authorName}</p>
+
+                    <div className="flex items-center justify-between mt-4 border-t border-slate-800 pt-4">
+                      <span className="text-2xl font-bold text-white">${book.price}</span>
+                      <Link href={`/books/${book._id}`}>
+                        <button className="flex items-center gap-2 text-sm font-semibold text-slate-300 hover:text-white transition-colors">
+                          <FaBookOpen className="text-amber-500"/> Details
+                        </button>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Mobile View All Button (Bottom) */}
+            <div className="mt-12 text-center md:hidden">
+              <Link href="/books">
+                <button className="btn btn-outline w-full border-amber-600 text-amber-500 hover:bg-amber-600 hover:text-white">
+                  View All Collection
+                </button>
+              </Link>
+            </div>
+          </>
+        )}
+      </section>
+
+      {/* --- NEWSLETTER / CTA SECTION --- */}
+      <section className="py-20 bg-slate-900 border-t border-slate-800">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+            <h2 className="text-3xl font-bold text-white mb-4">Stay Updated</h2>
+            <p className="text-slate-400 mb-8">Subscribe to get the latest book updates and exclusive offers.</p>
+            <div className="flex flex-col sm:flex-row gap-2 justify-center max-w-lg mx-auto">
+                <input type="email" placeholder="Enter your email" className="input input-bordered bg-slate-950 border-slate-700 text-white w-full focus:border-amber-500" />
+                <button className="btn bg-teal-600 hover:bg-teal-700 text-white border-none">Subscribe</button>
+            </div>
+        </div>
+      </section>
     </div>
   );
 }
