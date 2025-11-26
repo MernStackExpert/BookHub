@@ -1,67 +1,52 @@
-📚 BookHub - Online Library & Book Store
+# 📚 BookHub — Online Library & Book Store
 
-BookHub is a modern, responsive, and full-stack web application built with Next.js and Express.js. It serves as an online platform where users can browse books, view details, and manage their own book collections. The application features a premium UI with dark mode aesthetics, secure authentication, and real-time data management.
+**BookHub** is a modern, responsive full-stack web application built with **Next.js** (App Router) and **Express.js**.  
+It lets users browse books, view rich book details, and manage their personal book collection through a polished dark-theme UI.
 
-🔗 Live Links
+---
 
-Client (Frontend): Live Demo Link Here
+## 🔗 Live Links
 
-Server (Backend): API Server Link Here
+- **Frontend (Client):** https://bookhub-plum.vercel.app  
+- **Backend (Server Repo):** https://github.com/MernStackExpert/BookHub-Server.git
 
-✨ Key Features
+---
 
-🌍 Public Pages
+## ✨ Features
 
-Landing Page: A visually stunning homepage with Hero section, Featured Books, Testimonials, and FAQ.
+### Public
+- Beautiful **Landing Page** with Hero, Featured Books, Testimonials & FAQ  
+- **All Books** page with real-time search and category filters  
+- **Book Details** page (dynamic route) with 3D cover/visual effects  
+- Authentication using **Firebase** (Google + Email/Password)
 
-All Books Page: Browse the complete collection with Real-time Search and Category Filtering.
+### Protected (User Dashboard)
+- **Add Book** — upload book data + cover image (ImgBB integration)  
+- **Manage Books** — list, edit, delete books uploaded by the logged-in user  
+- **Update Book** — edit details and replace cover image  
+- **Private Routes** — middleware to protect dashboard routes
+- **All Books** — Show All Books
 
-Book Details: Dynamic page showing detailed information about a specific book with 3D cover effects.
 
-Authentication: Secure Login and Registration system using NextAuth.js (Google & Email/Password).
+### UI / UX
+- Fully **responsive**: mobile, tablet, desktop  
+- **Dark mode** aesthetic using Tailwind CSS + DaisyUI  
+- Smooth animations, glassmorphism, and toast notifications (React Hot Toast / SweetAlert2)
 
-🔒 Protected Pages (User Dashboard)
+---
 
-Add Book: Users can upload new books to the library. Includes ImgBB API integration for image uploads.
+## 🛠️ Tech Stack
 
-Manage Books: A dashboard table to view, edit, or delete books uploaded by the logged-in user.
+**Frontend**
+- Next.js (App Router)  
+- Tailwind CSS + DaisyUI  
+- React Icons  
+- Firebase (Google, Email/Password)  
+- Axios, React-Hook-Form, React-Hot-Toast / SweetAlert2
 
-Update Book: Functionality to modify book details and cover images.
+**Backend**
+- Node.js, Express.js  
+- MongoDB
+- Deployed on Vercel (Serverless functions for API routes)
 
-Private Routes: Middleware to protect dashboard routes from unauthorized access.
-
-🎨 UI/UX
-
-Responsive Design: Fully optimized for Mobile, Tablet, and Desktop.
-
-Premium Theme: Dark mode aesthetic using Tailwind CSS and DaisyUI.
-
-Interactions: Smooth animations, glassmorphism effects, and toast notifications.
-
-🛠️ Technologies Used
-
-Frontend
-
-Framework: Next.js (App Router)
-
-Styling: Tailwind CSS, DaisyUI
-
-Icons: React Icons
-
-Authentication: NextAuth.js
-
-HTTP Client: Axios
-
-Form Handling: React Hook Form
-
-Notifications: React Hot Toast / SweetAlert2
-
-Backend
-
-Runtime: Node.js
-
-Framework: Express.js
-
-Database: MongoDB (Native Driver)
-
-Deployment: Vercel (Serverless Function)
+---
