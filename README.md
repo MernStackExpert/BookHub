@@ -50,3 +50,38 @@ It lets users browse books, view rich book details, and manage their personal bo
 - Deployed on Vercel (Serverless functions for API routes)
 
 ---
+
+---
+
+## 🚀 Getting Started
+
+### 1️⃣ Clone the Repositories
+
+```bash
+git clone https://github.com/MernStackExpert/BookHub.git
+
+git clone https://github.com/MernStackExpert/BookHub-Server.git
+
+▶️ Backend Setup
+
+cd BookHub-Server
+npm install
+npx nodemon Index.js
+
+Create .env file in server:
+MONGO_URI=your_mongo_uri
+
+
+💻 Frontend Setup
+cd BookHub
+npm install
+npm run dev
+
+Create .env file in client:
+NEXT_PUBLIC_apiKey= FIREBASE APIKEY
+NEXT_PUBLIC_authDomain= FIREBASE AuthDomain
+NEXT_PUBLIC_projectId= FIREBASE Project Id
+NEXT_PUBLIC_storageBucket= FIREBASE Bucket
+NEXT_PUBLIC_messagingSenderId= FIREBASE SenderId
+NEXT_PUBLIC_appId= FIREBASE AppId
+NEXT_PUBLIC_image_hosting_key = ImgBb Hosting Api Key
